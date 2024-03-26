@@ -30,7 +30,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `tuser` (
   `login` varchar(64) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `rentedPlate` varchar(64) DEFAULT '000',
+  `rentedPlate` varchar(64) DEFAULT NULL,
   `role` enum('USER','ADMIN') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
 
