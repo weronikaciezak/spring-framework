@@ -42,7 +42,7 @@ public class JdbcUserRepository implements IUserRepository {
             throw new RuntimeException(e);
         }
         finally {
-                //TODO:zamkniecia polaczenia i
+                //TODO:close connection,statement and resultset.
         }
         return user;
     }
