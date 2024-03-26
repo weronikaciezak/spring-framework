@@ -39,7 +39,7 @@ CREATE TABLE `tuser` (
 --
 
 INSERT INTO `tuser` (`login`, `password`, `rentedPlate`, `role`) VALUES('lukasz', '6a01d2ff826b812897ab3dec11e939779d3b06dc3625c3377bd4ae9639e8a9bd', 'Lu1234', 'ADMIN');
-INSERT INTO `tuser` (`login`, `password`, `rentedPlate`, `role`) VALUES('student', 'f9e96cffb7fed126643e13d54f44dc391711cf29ae4baa7bc6daeaf70aa211aa', NULL, 'USER');
+INSERT INTO `tuser` (`login`, `password`, `rentedPlate`, `role`) VALUES('student', 'ad454dc5db203e4280041fcd250c3de1188cf66613d03a8fc6f0eadc3d1bec97', NULL, 'USER');
 
 -- --------------------------------------------------------
 
