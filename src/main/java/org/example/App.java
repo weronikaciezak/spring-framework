@@ -66,13 +66,18 @@ public class App {
                     System.out.println("what do you want to add? Car/Motrocycle");
                     line = scanner.nextLine();
                     if (line.equals("Car")) {
-                        ivr.addVehicle(
-                                new AddCarStrategy(new Car(arr[0],
+                        ivr.addVehicle(new Car(arr[0],
                                         arr[1],
                                         Integer.parseInt(arr[2]),
                                         Double.parseDouble(arr[3]),
-                                        arr[4]))
-                        );
+                                        arr[4]));
+//                        ivr.addVehicle(
+//                                new AddCarStrategy(new Car(arr[0],
+//                                        arr[1],
+//                                        Integer.parseInt(arr[2]),
+//                                        Double.parseDouble(arr[3]),
+//                                        arr[4]))
+//                        );
                     }
                     break;
                 case "9":
