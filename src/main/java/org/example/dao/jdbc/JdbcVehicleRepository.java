@@ -82,12 +82,31 @@ public class JdbcVehicleRepository implements IVehicleRepository {
         return false;
     }
 
+    public boolean addVehicle(AddVehicleStrategy strategy) {
+        //TODO: add logic for Motorcycle
+        try (Connection conn = manager.getConnection();
+             PreparedStatement stmt = strategy.prepare(conn)
+        ){
+
+            int changed = stmt.executeUpdate();
+
+            if (changed  > 0) {
+                System.out.println("Pojazd został pomyślnie dodany.");
+                return true;
+            } else {
+                System.out.println("Nie udało się dodać pojazdu.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     @Override
     public boolean addVehicle(Vehicle vehicle) {
         //TODO: add logic for Motorcycle
         try (Connection conn = manager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(INSERT_SQL)) {
-
+                        PreparedStatement stmt = conn.prepareStatement(INSERT_SQL)) {
             stmt.setString(1, vehicle.getBrand());
             stmt.setString(2, vehicle.getModel());
             stmt.setInt(3, vehicle.getYear());

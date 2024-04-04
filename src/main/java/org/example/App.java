@@ -3,6 +3,7 @@ package org.example;
 import org.example.authenticate.Authenticator;
 import org.example.dao.IUserRepository;
 import org.example.dao.IVehicleRepository;
+import org.example.dao.jdbc.AddCarStrategy;
 import org.example.dao.jdbc.JdbcUserRepository;
 import org.example.dao.jdbc.JdbcVehicleRepository;
 import org.example.model.Car;
@@ -62,16 +63,22 @@ public class App {
                     ////Motorcycle(String brand, String model, int year, double price, String plate, String category)
                     String line = scanner.nextLine();
                     String[] arr = line.split(";");
-                    ivr.addVehicle(
-                            new Car(arr[0],
-                                    arr[1],
-                                    Integer.parseInt(arr[2]),
-                                    Double.parseDouble(arr[3]),
-                                    arr[4]));
+                    System.out.println("what do you want to add? Car/Motrocycle");
+                    line = scanner.nextLine();
+                    if (line.equals("Car")) {
+                        ivr.addVehicle(
+                                new AddCarStrategy(new Car(arr[0],
+                                        arr[1],
+                                        Integer.parseInt(arr[2]),
+                                        Double.parseDouble(arr[3]),
+                                        arr[4]))
+                        );
+                    }
                     break;
                 case "9":
                     System.out.println("remove user:");
                     String  removeLogin = scanner.nextLine();
+
                     iur.removeUser(removeLogin);
                     break;
 

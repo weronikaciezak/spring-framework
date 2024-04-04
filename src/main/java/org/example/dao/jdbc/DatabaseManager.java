@@ -16,12 +16,16 @@ public class DatabaseManager {
         return DatabaseManager.instace;
     }
     private DatabaseManager(){
-        this.url = "jdbc:mysql://localhost:3306/spring2024";
-        this.user = "root";
+        this.url = "jdbc:postgresql://manny.db.elephantsql.com/***";
+        this.user = "***";
         this.password = "***";
     }
 
     public Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(url, user, password);
+    }
+
+    public Connection closeConnection() throws SQLException {
         return DriverManager.getConnection(url, user, password);
     }
 }
