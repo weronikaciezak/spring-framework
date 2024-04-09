@@ -16,16 +16,12 @@ public class DatabaseManager {
         return DatabaseManager.instace;
     }
     private DatabaseManager(){
-        this.url = "jdbc:postgresql://manny.db.elephantsql.com/***";
-        this.user = "***";
-        this.password = "***";
+        this.url = "jdbc:postgresql://flora.db.elephantsql.com/afouykme";
+        this.user = "afouykme";
+        this.password = "TZm9eUmMSTDxPf1zlVRYGSuBWOMZ7ooO";
     }
 
     public Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(url, user, password);
-    }
-
-    public Connection closeConnection() throws SQLException {
         return DriverManager.getConnection(url, user, password);
     }
 }

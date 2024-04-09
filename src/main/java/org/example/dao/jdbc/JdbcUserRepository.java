@@ -24,10 +24,11 @@ public class JdbcUserRepository implements IUserRepository {
         User user = null;
         Connection connection =null;
         ResultSet rs = null;
+        PreparedStatement preparedStatement = null;
         try{
             connection = databaseManager.getConnection();
             connection.createStatement();
-            PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_SQL);
+            preparedStatement = connection.prepareStatement(GET_USER_SQL);
             preparedStatement.setString(1, login);
             rs = preparedStatement.executeQuery();
             if(rs.next()) {
@@ -42,19 +43,83 @@ public class JdbcUserRepository implements IUserRepository {
             throw new RuntimeException(e);
         }
         finally {
-                //TODO:close connection,statement and resultset.
+            //TODO:zamkniecia polaczenia i
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return user;
     }
 
     @Override
     public void addUser(User user) {
-        //TODO:impement method addUser
+        //TODO:impement method addUser : done
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try{
+            connection = databaseManager.getConnection();
+            connection.createStatement();
+            String INSERT_USER = "INSERT INTO tuser (login, password, rentedPlate, role) VALUES (?, ?, ?, ?)";
+            preparedStatement = connection.prepareStatement(INSERT_USER);
+
+            preparedStatement.setString(1, user.getLogin());
+            preparedStatement.setString(2, user.getPassword());
+            preparedStatement.setString(3, user.getRentedPlate());
+            preparedStatement.setString(4, user.getRole().toString());
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        if (preparedStatement != null) {
+            try {
+                preparedStatement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
     public void removeUser(String login) {
-        //TODO:implement method removeUser
+        //TODO:implement method removeUser : DONE
+            Connection connection = null;
+            PreparedStatement preparedStatement = null;
+            try {
+                connection = databaseManager.getConnection();
+                String CHECK_EXIST = "SELECT COUNT(*) FROM tuser WHERE username = ?";
+                preparedStatement = connection.prepareStatement(CHECK_EXIST);
+                preparedStatement.setString(1, login);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                if (resultSet.next() && resultSet.getInt(1) > 0) {
+                    String DELETE_USER = "DELETE FROM tuser WHERE username = ?";
+                    preparedStatement = connection.prepareStatement(DELETE_USER);
+                    preparedStatement.setString(1, login);
+                    int rowsDeleted = preparedStatement.executeUpdate();
+                    if (rowsDeleted > 0) {
+                        System.out.println("User " + login + " was deleted successfully!");
+                    } else {
+                        System.out.println("No user found with username: " + login);
+                    }
+                } else {
+                    System.out.println("No user found with username: " + login);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } finally {
+                if (preparedStatement != null) {
+                    try {
+                        preparedStatement.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
     }
 
     @Override

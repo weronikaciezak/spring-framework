@@ -12,4 +12,7 @@ public interface IUserRepository {
     void removeUser(String login);
     Collection<User> getUsers();
 
+
+
+
 }
