@@ -12,7 +12,8 @@ public class User {
     private Role role;
 
     //private String rentedPlate;
-    //TODO:add OneToOne relation (class Vehicle)
+    //TODO:add OneToOne relation (class Vehicle) : done
+    @OneToOne(mappedBy = "user", fetch = FetchType.EAGER)
     private Vehicle vehicle;
 
     public User(String login, String password, Role role, Vehicle vehicle) {
@@ -28,8 +29,7 @@ public class User {
         this.role = Role.USER;
     }
 
-    public User() {
-    }
+    public User() {} //mandatory
 
     public String getLogin() {
         return login;

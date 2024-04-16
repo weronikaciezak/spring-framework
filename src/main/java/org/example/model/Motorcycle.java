@@ -2,12 +2,15 @@ package org.example.model;
 
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
 @Entity
 @DiscriminatorValue("MOTORCYCLE")
 public class Motorcycle extends Vehicle {
 
     String category;
+    @Id
+    private Long id;
 
     public Motorcycle(String brand, String model, int year, double price, String plate,String category) {
         super(brand, model, year, price, plate);
@@ -38,5 +41,13 @@ public class Motorcycle extends Vehicle {
                 super.toString()+
                 " category='" + category + '\'' +
                 '}';
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

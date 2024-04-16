@@ -1,21 +1,29 @@
 package org.example.model;
 
 import jakarta.persistence.*;
+
 import org.example.BooleanToShortConventer;
 
 //TODO: Make this class an entity. Also add Inheritance strategy with discrimination column vehicle_type.
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "vehicle_type", discriminatorType = DiscriminatorType.STRING)
 public abstract class Vehicle {
     private String brand;
     private String model;
     private int year;
     //TODO: make this field numeric during mapping.
+    @Column(name = "price", precision = 6, scale = 2)
     private double price;
-    //TODO: make this field an ID.
+    //TODO: make this field an ID. : done
+    @Id
     private String plate;
-    //TODO: add conventer for this field.
+    //TODO: add conventer for this field. : done
+    @Convert(converter = BooleanToShortConventer.class)
     private boolean rent;
     @OneToOne(mappedBy = "vehicle", fetch = FetchType.EAGER)
     private User user;
+
 
     public Vehicle(String brand, String model, int year, double price, String plate) {
         this.brand = brand;

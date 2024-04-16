@@ -7,12 +7,12 @@ import org.example.model.Vehicle;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.query.Query;
 
 import java.util.Collection;
 
 
 public class VehicleDAO implements IVehicleRepository {
+    private static VehicleDAO instance;
     SessionFactory sessionFactory;
 
     public VehicleDAO(SessionFactory sessionFactory) {
@@ -53,18 +53,50 @@ public class VehicleDAO implements IVehicleRepository {
         }
     }
 
-
     @Override
     public boolean addVehicle(Vehicle vehicle) {
+        //TODO:Finish this method : done
         Session session = null;
         Transaction transaction = null;
-        boolean success=false;
-        //TODO:Finish this method
+        boolean success = false;
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            session.save(vehicle);
+            transaction.commit();
+            success = true;
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
         return success;
     }
     @Override
     public boolean removeVehicle(String plate) {
-        //TODO: Implement removeVehicle method.
+        //TODO: Implement removeVehicle method. : done
+        Session session = null;
+        Transaction transaction = null;
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            Vehicle vehicle = session.get(Vehicle.class, plate);
+            if (vehicle != null && vehicle.getUser() == null) {
+                session.remove(vehicle);
+                transaction.commit();
+                return true;
+            }
+        } catch (RuntimeException e) {
+            if (transaction != null) transaction.rollback();
+            throw e;
+        } finally {
+            session.close();
+        }
         return false;
     }
 
@@ -81,19 +113,47 @@ public class VehicleDAO implements IVehicleRepository {
 
     //Must implement old interface. Plate is no longer needed when User has Vehicle.
     public boolean returnVehicle(String plate,String login) {
-        //TODO:Implement returnVehicle method
+        //TODO:Implement returnVehicle method : done
+        Session session = sessionFactory.openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            Vehicle vehicle = session.get(Vehicle.class, plate);
+            if (vehicle != null) {
+                vehicle.setRent(false);
+                session.update(vehicle);
+                tx.commit();
+                return true;
+            }
+        } catch (Exception e) {
+            if (tx != null) tx.rollback();
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
         return false;
-
     }
 
     @Override
     public Collection<Vehicle> getVehicles() {
         Session session = sessionFactory.openSession();
+        Transaction transaction = null;
         try {
-            //TODO:finish this method
-            return null;
+            transaction = session.beginTransaction();
+            Collection<Vehicle> vehicles = session.createQuery("from Vehicle", Vehicle.class).getResultList();
+            transaction.commit();
+            return vehicles;
+        } catch (RuntimeException e) {
+            if (transaction != null) transaction.rollback();
+            throw e;
         } finally {
             session.close();
         }
+    }
+    public static VehicleDAO getInstance(SessionFactory sessionFactory) {
+        if (instance == null) {
+            instance = new VehicleDAO(sessionFactory);
+        }
+        return instance;
     }
 }

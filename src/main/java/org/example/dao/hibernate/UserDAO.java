@@ -15,7 +15,17 @@ public class UserDAO implements IUserRepository {
         Session session = sessionFactory.openSession();
         User user = null;
         Transaction transaction = null;
-        //TODO: Finish this method
+        //TODO: Finish this method : done
+        try {
+            transaction = session.beginTransaction();
+            user = session.get(User.class, login);
+            transaction.commit();
+        } catch (RuntimeException e) {
+            if (transaction != null) transaction.rollback();
+            throw e;
+        } finally {
+            session.close();
+        }
         return user;
     }
 
